@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,14 @@ func GetProduct(c *gin.Context) {
 }
 
 func CreateProduct(c *gin.Context) {
-	// Логика для создания товара
-	c.JSON(http.StatusOK, gin.H{"message": "Product created"})
+	var print struct {
+		Task string `json:"task"`
+	}
+	if err := c.ShouldBindJSON(&print); err != nil {
+		c.JSON(400, gin.H{"error": "Invalid JSON"})
+		return
+	}
+	c.JSON(200, gin.H{
+		"message": fmt.Sprintf("Task %s was successfully created", print.Task),
+	})
 }
